@@ -1,5 +1,6 @@
 package com.jojoldu.book.springboot_practice2.web.dto;
 
+import com.jojoldu.book.springboot_practice2.config.auth.LoginUser;
 import com.jojoldu.book.springboot_practice2.config.auth.dto.SessionUser;
 import com.jojoldu.book.springboot_practice2.service.posts.PostsService;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +19,9 @@ public class IndexController {
     private final HttpSession httpSession;
 
     @GetMapping("/")
-    public String index(Model model) {
+    public String index(Model model, @LoginUser SessionUser user) { // 어느 컨트롤러든지 LoginUser 어노테이션만 사용하면 세션 정보를 가져올 수 있게 됨
         model.addAttribute("posts", postsService.findAllDesc());
-        SessionUser user = (SessionUser) httpSession.getAttribute("user");  // 로그인 성공 시 세션에 SessionUser 를 저장하도록 함
+//        SessionUser user = (SessionUser) httpSession.getAttribute("user");  // 로그인 성공 시 세션에 SessionUser 를 저장하도록 함
         if(user != null) {  // 세션에 저장된 값이 있을 때만 model에 userName으로 등록한다. 만약 저장된 값이 없으면 model엔 아무런 값이 없는 상태로, 로그인 버튼이 보이게 된다.
             model.addAttribute("userName", user.getName());
         }
